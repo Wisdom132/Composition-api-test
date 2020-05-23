@@ -1,58 +1,75 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
-</template>
+  <section>
+    <div class="form-container">
+      <h2>Add User</h2>
+      <form @submit.prevent="addUser">
+        <div>
+          <label>Name</label>
+          <br />
+          <input v-model="state.input" type="text" />
+        </div>
 
+        <div>
+          <button type="submit" class="submit">Add User</button>
+        </div>
+      </form>
+    </div>
+    <div class="list-container">
+      <ul v-for="(user,index) in state.users" :key="index">
+        <li>
+          {{user}}
+          <span style="float:right;padding-right:10px;">
+            <button @click="removeUser(index)">X</button>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </section>
+</template>
 <script>
+import { reactive } from "@vue/composition-api";
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  setup() {
+    const { state, addUser, removeUser } = userList();
+    return { state, addUser, removeUser };
   }
+};
+function userList() {
+  let state = reactive({
+    input: "",
+    users: ["Wisdom"]
+  });
+
+  let addUser = () => {
+    state.users.push(state.input);
+    state.input = "";
+  };
+  let removeUser = i => {
+    state.users.splice(i, 1);
+  };
+  return { state, addUser, removeUser };
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+input {
+  width: 20%;
+  height: 30px;
+  border: 2px solid green;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.submit {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 0px;
+  border: 0px;
+  background: green;
+  color: white;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+
+ul li {
+  list-style: none;
+  border: 2px solid green;
+  width: 30%;
+  margin-top: 10px;
 }
 </style>
